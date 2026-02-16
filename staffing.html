@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staffing</title>
+    <link rel="stylesheet" href="staffing.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-content">
+        <h1>Staffing Portal</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="assignment-wrapper">
+        <!-- Events Section -->
+        <div class="section events-section">
+          <h2>Events</h2>
+          <div class="events-list" id="eventsList"></div>
+        </div>
+
+        <!-- Staff Section -->
+        <div class="section staff-section">
+          <h2>Available Staff</h2>
+          <div class="staff-list" id="staffList"></div>
+        </div>
+
+        <!-- Assignments Section -->
+        <div class="section assignments-section">
+          <h2>Event Assignments</h2>
+          <div class="assignments-container" id="assignmentsContainer"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="staffing.js"></script>
+</body>
+</html>

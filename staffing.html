@@ -16,6 +16,11 @@
     </header>
 
     <main class="main-content">
+      <div class="action-buttons" id="actionButtons">
+        <button class="assign-btn" onclick="assignStaffToEvent()">Assign Selected</button>
+        <button class="clear-btn" onclick="clearSelections()">Clear</button>
+      </div>
+
       <div class="assignment-wrapper">
         <!-- Events Section -->
         <div class="section events-section">
@@ -26,6 +31,9 @@
         <!-- Staff Section -->
         <div class="section staff-section">
           <h2>Available Staff</h2>
+          <select id="staffRoleFilter" class="role-filter" onchange="applyRoleFilter()">
+            <option value="">All Roles</option>
+          </select>
           <div class="staff-list" id="staffList"></div>
         </div>
 

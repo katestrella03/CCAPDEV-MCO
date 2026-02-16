@@ -22,6 +22,7 @@ const staff = [
 let selectedEvent = null;
 let selectedStaff = [];
 let assignments = {}; // { eventId: [staffIds] }
+let roleFilter = '';
 
 // Initialize assignments
 events.forEach(event => {
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderEvents();
   renderStaff();
   renderAssignments();
+  initializeRoleFilter();
 });
 
 // Render events
@@ -61,7 +63,11 @@ function renderStaff() {
   const staffList = document.getElementById('staffList');
   staffList.innerHTML = '';
 
-  staff.forEach(staffMember => {
+  const filteredStaff = roleFilter 
+    ? staff.filter(s => s.role === roleFilter)
+    : staff;
+
+  filteredStaff.forEach(staffMember => {
     const staffDiv = document.createElement('div');
     staffDiv.className = `staff-item ${selectedStaff.find(s => s.id === staffMember.id) ? 'selected' : ''}`;
     staffDiv.onclick = () => toggleStaffSelection(staffMember);
@@ -184,29 +190,26 @@ function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
+// Initialize role filter
+function initializeRoleFilter() {
+  const roleFilterSelect = document.getElementById('staffRoleFilter');
+  const uniqueRoles = [...new Set(staff.map(s => s.role))];
+  
+  uniqueRoles.forEach(role => {
+    const option = document.createElement('option');
+    option.value = role;
+    option.textContent = role;
+    roleFilterSelect.appendChild(option);
+  });
+}
+
+// Apply role filter
+function applyRoleFilter() {
+  roleFilter = document.getElementById('staffRoleFilter').value;
+  renderStaff();
+}
+
 // Logout
 function logout() {
   window.location.href = 'login.html';
 }
-
-// Add assignment buttons dynamically
-function addAssignmentButtons() {
-  const eventsList = document.getElementById('eventsList');
-  if (eventsList.parentElement.querySelector('.action-buttons')) return;
-  
-  const wrapper = document.querySelector('.events-section');
-  let buttonsDiv = wrapper.querySelector('.action-buttons');
-  
-  if (!buttonsDiv) {
-    buttonsDiv = document.createElement('div');
-    buttonsDiv.className = 'action-buttons';
-    buttonsDiv.innerHTML = `
-      <button class="assign-btn" onclick="assignStaffToEvent()">Assign Selected</button>
-      <button class="clear-btn" onclick="clearSelections()">Clear</button>
-    `;
-    wrapper.appendChild(buttonsDiv);
-  }
-}
-
-// Initialize buttons on load
-window.addEventListener('load', addAssignmentButtons);

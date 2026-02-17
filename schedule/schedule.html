@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Schedule Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="schedule.css">
+</head>
+<body>
+    <div class="header-gradient">
+        <div class="header-title">Staff Schedule Calendar</div>
+        <button class="logout-btn">Logout</button>
+    </div>
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <span style="font-weight: bold; font-size: 1.2rem;">WHAT TITLE?</span>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="sidebar-item"><span>User Profile</span></a>
+            <a href="#" class="sidebar-item active"><span>Staff Dashboard</span></a>
+            <a href="#" class="sidebar-item"><span>Messages</span></a>
+            <a href="#" class="sidebar-item"><span>Settings</span></a>
+        </div>
+        <div class="sidebar-signout">
+            <a href="#" class="sidebar-item"><span>Sign Out</span></a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="calendar-container">
+        <div class="calendar-header">
+            <h2>Schedule</h2>
+            <div class="calendar-controls">
+                <button id="prevMonth">&#8592; Prev</button>
+                <span id="monthYear"></span>
+                <button id="nextMonth">Next &#8594;</button>
+            </div>
+        </div>
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                </tr>
+            </thead>
+            <tbody id="calendarBody">
+            </tbody>
+        </table>
+        </div>
+        <div id="eventDetailsModalOverlay" style="display:none;align-items:center;justify-content:center;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.18);z-index:2000;">
+            <div id="eventDetailsModal" style="background:#fff;border-radius:8px;box-shadow:0 2px 16px rgba(0,0,0,0.13);width:480px;max-width:95vw;padding:28px 28px 18px 28px;position:relative;font-family:'Inter',Arial,sans-serif;">
+                <button class="modal-close" id="closeEventDetailsModal" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#888;">&times;</button>
+                <div id="eventDetailsContent"></div>
+                    <div class="modal-actions" style="margin-top:18px;justify-content:flex-end;display:none;" id="eventDetailsActions">
+                        <button id="deleteEventBtn" style="background:#e57373;color:#fff;border:none;border-radius:6px;padding:7px 18px;font-size:1rem;cursor:pointer;">Delete</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+        <!-- adding/editing event -->
+        <div id="eventModalOverlay">
+            <div id="eventModal">
+                <button class="modal-close" id="closeEventModal">&times;</button>
+                <h3>Add Event</h3>
+                <form id="eventForm">
+                    <div class="modal-field">
+                        <div class="modal-label">Title</div>
+                        <input type="text" id="eventTitle" placeholder="Input Event Title..." required />
+                    </div>
+                    <div class="modal-field">
+                        <div class="modal-label">Date</div>
+                        <input type="date" id="eventDate" required />
+                    </div>
+                    <div class="modal-field" style="display: flex; gap: 10px;">
+                        <div style="flex:1;">
+                            <div class="modal-label">From</div>
+                            <input type="time" id="eventStartTime" required />
+                        </div>
+                        <div style="flex:1;">
+                            <div class="modal-label">To</div>
+                            <input type="time" id="eventEndTime" required />
+                        </div>
+                    </div>
+                    <div class="modal-field">
+                        <div class="modal-label">Location</div>
+                        <input type="text" id="eventLocation" placeholder="Input Event Location..." />
+                    </div>
+                    <div class="modal-field">
+                        <div class="modal-label">Color</div>
+                        <input type="color" id="eventColor" value="#3bb18a" />
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" id="cancelEventBtn">Cancel</button>
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <script src="schedule.js"></script>
+</body>
+</html>

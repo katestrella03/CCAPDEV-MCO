@@ -1,0 +1,227 @@
+/* --- GLOBAL RESET --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+body {
+    background: #f7f7f7;
+    color: #222;
+    overflow-x: hidden;
+}
+
+/* --- FIXED TOP BAR (Dashboard Style) --- */
+.header-gradient {
+    width: 100%;
+    background: linear-gradient(90deg, #2e8c6a 0%, #3bb18a 100%);
+    color: #fff;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px; /* Fixed height for consistency */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.header-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.logout-btn {
+    background: #5bb3a7 !important;
+    color: #fff !important;
+    border: 2px solid #45998e !important;
+    border-radius: 8px;
+    padding: 8px 24px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(46,140,106,0.08);
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    margin-right: 12px;
+}
+
+.logout-btn:hover {
+    background: #45998e !important;
+    color: #fff !important;
+    border: 2px solid #35786e !important;
+}
+
+/* --- FIXED SIDEBAR (Dashboard Style) --- */
+.sidebar {
+    width: 200px;
+    background: #fff;
+    border-right: 1px solid #e0e7ef;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0 0 0;
+    position: fixed;
+    left: 0;
+    top: 72px; /* Starts exactly below header */
+    bottom: 0;
+    z-index: 10;
+}
+
+.sidebar-logo {
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 0 24px 32px 24px;
+    color: #2e8c6a;
+}
+
+.sidebar-menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sidebar-item {
+    display: block;
+    padding: 12px 24px;
+    color: #222;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 8px 0 0 8px;
+    margin-right: 8px;
+    transition: background 0.18s, color 0.18s;
+}
+
+.sidebar-item:hover, .sidebar-item.active {
+    background: #e0e7ef;
+    color: #2e8c6a;
+    font-weight: 600;
+}
+
+/* --- MAIN CONTENT LAYOUT --- */
+.main-content {
+    margin-left: 200px; /* Width of Sidebar */
+    padding: 104px 32px 32px 32px; /* Top padding = 72px header + 32px gap */
+    min-height: 100vh;
+}
+
+/* --- CONTENT UI COMPONENTS --- */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.assign-btn {
+    background: #2e8c6a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(46,140,106,0.1);
+}
+
+.assign-btn:hover { background: #20614a; }
+
+.clear-btn {
+    background: #c6ede2;
+    color: #267a5a;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* --- STAFFING GRID --- */
+.assignment-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.section {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(46,140,106,0.07);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 230px); /* Keeps sections from overflowing page */
+}
+
+.section h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2e8c6a;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #e0e7ef;
+    padding-bottom: 10px;
+}
+
+/* Scrollable lists within columns */
+.events-list, .staff-list, .assignments-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* --- ITEM CARDS --- */
+.event-item, .staff-item {
+    background: #f9fafb;
+    border: 1.5px solid #e0e7ef;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.event-item:hover, .staff-item:hover { border-color: #3bb18a; background: #f0f9f7; }
+.event-item.selected, .staff-item.selected { border: 2px solid #2e8c6a; background: #e0f7ef; }
+
+.event-item h3, .staff-item h3 { color: #2e8c6a; font-size: 1.05rem; margin-bottom: 4px; }
+.event-item p, .staff-item p { font-size: 0.9rem; color: #555; }
+
+/* --- FORMS & BADGES --- */
+.role-filter {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e7ef;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.assignment-card {
+    background: #fff;
+    border: 1px solid #e0e7ef;
+    border-left: 4px solid #2e8c6a;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+
+.staff-badge {
+    background: #f0f9f7;
+    color: #2e8c6a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+
+.remove-btn {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 8px;
+    cursor: pointer;
+}

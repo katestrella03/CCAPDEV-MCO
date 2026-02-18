@@ -1,0 +1,213 @@
+/* --- GLOBAL RESET --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+body {
+    background: #f7f7f7;
+    color: #222;
+}
+
+/* --- FIXED HEADER --- */
+.header-gradient {
+    width: 100%;
+    background: linear-gradient(90deg, #2e8c6a 0%, #3bb18a 100%);
+    color: #fff;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.header-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* --- CORRECTED LOGOUT BUTTON --- */
+.logout-btn {
+    background: #5bb3a7 !important;
+    color: #fff !important;
+    border: 2px solid #45998e !important;
+    border-radius: 8px;
+    padding: 8px 24px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(46,140,106,0.08);
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    margin-right: 12px;
+}
+
+.logout-btn:hover {
+    background: #45998e !important;
+    color: #fff !important;
+    border: 2px solid #35786e !important;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+    width: 200px;
+    background: #fff;
+    border-right: 1px solid #e0e7ef;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0 0 0;
+    position: fixed;
+    left: 0;
+    top: 72px;
+    bottom: 0;
+    z-index: 10;
+}
+
+.sidebar-logo {
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 0 24px 32px 24px;
+    color: #2e8c6a;
+}
+
+.sidebar-menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sidebar-item {
+    display: block;
+    padding: 12px 24px;
+    color: #222;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 8px 0 0 8px;
+    margin-right: 8px;
+    transition: all 0.2s;
+}
+
+.sidebar-item:hover, .sidebar-item.active {
+    background: #e0e7ef;
+    color: #2e8c6a;
+    font-weight: 600;
+}
+
+/* --- MAIN CONTENT --- */
+.main-content {
+    margin-left: 200px;
+    padding: 104px 32px 32px 32px;
+    min-height: 100vh;
+}
+
+.dashboard-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+/* --- CARDS & BOXES --- */
+.dashboard-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    flex: 1;
+    box-shadow: 0 2px 16px rgba(46,140,106,0.07);
+}
+
+.today-highlight {
+    border-left: 6px solid #2e8c6a;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2e8c6a;
+    margin-bottom: 12px;
+}
+
+.shift-detail span {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.shift-time { font-size: 1.4rem; font-weight: 700; color: #333; }
+.shift-event { font-weight: 600; color: #555; }
+.shift-loc { font-size: 0.9rem; color: #888; }
+
+.section-container h2 {
+    font-size: 1.1rem;
+    color: #2e8c6a;
+    margin-bottom: 16px;
+}
+
+.content-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 16px rgba(46,140,106,0.07);
+}
+
+/* --- UI ELEMENTS --- */
+.report-btn {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.date-badge {
+    background: #e0f7ef;
+    color: #2e8c6a;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    min-width: 45px;
+    text-align: center;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.list-item:last-child { border: none; }
+
+.notes-box { font-style: italic; color: #555; border-top: 4px solid #3bb18a; }
+.note-author { display: block; margin-top: 10px; font-weight: 600; color: #2e8c6a; font-style: normal; }
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.todo-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #2e8c6a;
+}

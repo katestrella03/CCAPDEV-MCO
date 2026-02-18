@@ -8,9 +8,9 @@ function handleLogin() {
   }
 
   const dashboards = {
-    'staff': 'staff_dashboard.html',
-    'manager': 'manager_dashboard.html',
-    'admin': 'admin_dashboard.html'
+    'staff': 'staff/staff_dashboard.html',
+    'manager': "manager/manager_dashboard.html",
+    'admin': 'admin/admin_dashboard.html'
   };
 
   if (dashboards[username]) {

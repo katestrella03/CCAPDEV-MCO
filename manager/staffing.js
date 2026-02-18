@@ -209,7 +209,3 @@ function applyRoleFilter() {
   renderStaff();
 }
 
-// Logout
-function logout() {
-  window.location.href = 'login.html';
-}

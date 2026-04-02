@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="/css/schedule.css">
+    <link rel="stylesheet" href="/css/manager_dashboard.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header-gradient">
+        <div class="header-title">Manager Dashboard</div>
+        <button class="logout-btn" onclick="window.location.href='/'">Logout</button>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <span style="font-weight: bold; font-size: 1.2rem;">HAVEN</span>
+        </div>
+        <div class="sidebar-menu">
+            <a href="/manager" class="sidebar-item active">Dashboard</a>
+            <a href="/profile" class="sidebar-item">User Profile</a>
+            <a href="/messages" class="sidebar-item">Messages</a>
+            <a href="/staffing" class="sidebar-item">Staffing</a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- CARDS -->
+        <div class="dashboard-cards">
+            <div class="dashboard-card">
+                <div class="card-title">Total Events</div>
+                <div class="card-value" id="totalEvents">0</div>
+            </div>
+            <div class="dashboard-card">
+                <div class="card-title">Active Events</div>
+                <div class="card-value" id="activeEvents">0</div>
+            </div>
+            <div class="dashboard-card">
+                <div class="card-title">Staff Assigned (%)</div>
+                <div class="card-value" id="staffAssigned">0%</div>
+            </div>
+            <div class="dashboard-card">
+                <div class="card-title">Upcoming Events (Week)</div>
+                <div class="card-value" id="upcomingEvents">0</div>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="dashboard-table-section">
+            <div class="dashboard-table-header">
+                <span>Event Summary</span>
+                <button class="assign-btn" id="createEventBtn">+ Create New Event</button>
+            </div>
+
+            <table class="dashboard-table">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Date & Time</th>
+                        <th>Venue</th>
+                        <th>Staff Count</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="eventSummaryTable">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- MODAL -->
+    <div id="eventModalOverlay" style="display:none;align-items:center;justify-content:center;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.18);z-index:2000;">
+        <div id="eventModal" style="background:#fff;border-radius:8px;box-shadow:0 2px 16px rgba(0,0,0,0.13);width:420px;max-width:95vw;padding:28px;position:relative;">
+
+            <button id="closeEventModal" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.3rem;cursor:pointer;">&times;</button>
+
+            <h3>Create New Event</h3>
+
+            <!-- 🔥 REAL FORM -->
+            <form action="/create-event" method="POST">
+
+                <div class="modal-field">
+                    <div class="modal-label">Event Name</div>
+                    <input name="name" type="text" required />
+                </div>
+
+                <div class="modal-field">
+                    <div class="modal-label">Date</div>
+                    <input name="date" type="date" required />
+                </div>
+
+                <div class="modal-field" style="display:flex; gap:10px;">
+                    <div style="flex:1;">
+                        <div class="modal-label">From</div>
+                        <input name="startTime" type="time" required />
+                    </div>
+                    <div style="flex:1;">
+                        <div class="modal-label">To</div>
+                        <input name="endTime" type="time" required />
+                    </div>
+                </div>
+
+                <div class="modal-field">
+                    <div class="modal-label">Venue</div>
+                    <input name="venue" type="text" required />
+                </div>
+
+                <div class="modal-field">
+                    <div class="modal-label">Status</div>
+                    <select name="status" required>
+                        <option value="Preparation">Preparation</option>
+                        <option value="Pre-planning">Pre-planning</option>
+                        <option value="On-going">On-going</option>
+                        <option value="Finished">Finished</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelEventBtn">Cancel</button>
+                    <button type="submit">Create</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="/js/manager_dashboard.js"></script>
+
+</body>
+</html>

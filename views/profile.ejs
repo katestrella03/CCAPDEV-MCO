@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - HAVEN</title>
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+    <div class="header-gradient">
+        <div class="header-title">User Profile</div>
+         <button class="logout-btn" onclick="window.location.href='/'">Logout</button>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h2 class="profile-name"><%= user.username %></h2>
+                <span class="role-badge"><%= user.role %></span>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail-group">
+                    <label>Username</label>
+                    <p><%= user.username %></p>
+                </div>
+
+                <div class="detail-group">
+                    <label>Role</label>
+                    <p><%= user.role %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

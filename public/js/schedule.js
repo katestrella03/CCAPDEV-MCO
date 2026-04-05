@@ -6,6 +6,7 @@ const nextMonthBtn = document.getElementById('nextMonth');
 let today = new Date();
 let currentMonth = today.getMonth();
 let currentYear = today.getFullYear();
+let cachedCalendarEvents = {};
 
 // Store events in localStorage
 function getEvents() {
@@ -15,13 +16,56 @@ function saveEvents(events) {
     localStorage.setItem('calendarEvents', JSON.stringify(events));
 }
 
-function renderCalendar(month, year) {
-    monthYear.textContent = `${today.toLocaleString('default', { month: 'long' })} ${year}`;
+async function fetchStaffEvents() {
+    try {
+        const response = await fetch('/api/staff-events');
+        if (!response.ok) throw new Error('Failed to fetch staff events');
+        return await response.json();
+    } catch (error) {
+        console.error('Error loading staff events:', error);
+        return [];
+    }
+}
+
+async function loadCalendarEvents() {
+    const localEvents = getEvents();
+    const remoteEvents = await fetchStaffEvents();
+    const mergedEvents = {};
+
+    remoteEvents.forEach((event) => {
+        if (!event.date) return;
+        const dayKey = event.date;
+        if (!mergedEvents[dayKey]) mergedEvents[dayKey] = [];
+        mergedEvents[dayKey].push({
+            name: event.name || 'Untitled',
+            time: event.startTime && event.endTime ? `${event.startTime} - ${event.endTime}` : '',
+            location: event.venue || '',
+            color: '#3bb18a',
+            checked: false,
+            source: 'remote'
+        });
+    });
+
+    Object.keys(localEvents).forEach((dayKey) => {
+        mergedEvents[dayKey] = mergedEvents[dayKey] || [];
+        mergedEvents[dayKey] = mergedEvents[dayKey].concat(localEvents[dayKey].map((event, i) => ({
+            ...event,
+            source: 'local',
+            localIdx: i
+        })));
+    });
+
+    return mergedEvents;
+}
+
+async function renderCalendar(month, year) {
+    monthYear.textContent = `${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}`;
     calendarBody.innerHTML = '';
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     let date = 1;
-    let events = getEvents();
+    let events = await loadCalendarEvents();
+    cachedCalendarEvents = events;
     for (let i = 0; i < 6; i++) {
         let row = document.createElement('tr');
         for (let j = 0; j < 7; j++) {
@@ -58,12 +102,20 @@ function renderCalendar(month, year) {
                             if (event.time && event.time.includes('-')) {
                                 startTime = event.time.split('-')[0].trim();
                             }
-                            li.innerHTML = `
-                                <input type="checkbox" class="event-checkbox" ${event.checked ? 'checked' : ''} data-day="${dayKey}" data-idx="${event._idx}">
-                                <span class="event-label${event.checked ? ' event-done' : ''}" style="background:${event.color};cursor:pointer;">
-                                    <strong>${startTime ? startTime + ' ' : ''}${event.name}</strong>
-                                </span>
-                            `;
+                            if (event.source === 'local') {
+                                li.innerHTML = `
+                                    <input type="checkbox" class="event-checkbox" ${event.checked ? 'checked' : ''} data-day="${dayKey}" data-local-idx="${event.localIdx}">
+                                    <span class="event-label${event.checked ? ' event-done' : ''}" style="background:${event.color};cursor:pointer;">
+                                        <strong>${startTime ? startTime + ' ' : ''}${event.name}</strong>
+                                    </span>
+                                `;
+                            } else {
+                                li.innerHTML = `
+                                    <span class="event-label" style="background:${event.color};cursor:pointer;">
+                                        <strong>${startTime ? startTime + ' ' : ''}${event.name}</strong>
+                                    </span>
+                                `;
+                            }
                             li.querySelector('.event-label').addEventListener('click', function(ev) {
                                 ev.stopPropagation();
                                 showEventDetailsModal(dayKey, event._idx);
@@ -92,8 +144,9 @@ const closeEventDetailsModalBtn = document.getElementById('closeEventDetailsModa
 const eventDetailsContent = document.getElementById('eventDetailsContent');
 
 function showEventDetailsModal(dayKey, idx) {
-    const events = getEvents();
-    const event = events[dayKey][idx];
+    const events = cachedCalendarEvents;
+    const event = events[dayKey] && events[dayKey][idx];
+    if (!event) return;
     let dateObj = new Date(dayKey);
     let dateStr = dateObj.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
     let timeStr = event.time || '';
@@ -105,18 +158,26 @@ function showEventDetailsModal(dayKey, idx) {
     `;
     eventDetailsModalOverlay.style.display = 'flex';
     const actions = document.getElementById('eventDetailsActions');
-    if (actions) actions.style.display = 'flex';
+    if (actions) actions.style.display = event.source === 'local' ? 'flex' : 'none';
     const deleteBtn = document.getElementById('deleteEventBtn');
     if (deleteBtn) {
-        deleteBtn.onclick = function() {
-            if (confirm('Delete this event?')) {
-                events[dayKey].splice(idx, 1);
-                if (events[dayKey].length === 0) delete events[dayKey];
-                saveEvents(events);
-                closeEventDetailsModal();
-                renderCalendar(currentMonth, currentYear);
-            }
-        };
+        if (event.source === 'local') {
+            deleteBtn.onclick = function() {
+                if (confirm('Delete this event?')) {
+                    const localEvents = getEvents();
+                    const dayEvents = localEvents[dayKey];
+                    if (dayEvents && typeof event.localIdx === 'number') {
+                        dayEvents.splice(event.localIdx, 1);
+                        if (dayEvents.length === 0) delete localEvents[dayKey];
+                        saveEvents(localEvents);
+                    }
+                    closeEventDetailsModal();
+                    renderCalendar(currentMonth, currentYear).catch(console.error);
+                }
+            };
+        } else {
+            deleteBtn.onclick = null;
+        }
     }
 }
 
@@ -188,9 +249,11 @@ calendarBody.addEventListener('change', function(e) {
     let events = getEvents();
     if (e.target.classList.contains('event-checkbox')) {
         let day = e.target.getAttribute('data-day');
-        let idx = e.target.getAttribute('data-idx');
-        events[day][idx].checked = e.target.checked;
-        saveEvents(events);
+        let idx = parseInt(e.target.getAttribute('data-local-idx'), 10);
+        if (events[day] && typeof idx === 'number') {
+            events[day][idx].checked = e.target.checked;
+            saveEvents(events);
+        }
         // strikethrough
         const label = e.target.parentElement.querySelector('.event-label');
         if (e.target.checked) {
@@ -208,7 +271,7 @@ prevMonthBtn.onclick = function() {
         currentYear--;
     }
     today = new Date(currentYear, currentMonth, 1);
-    renderCalendar(currentMonth, currentYear);
+    renderCalendar(currentMonth, currentYear).catch(console.error);
 };
 nextMonthBtn.onclick = function() {
     currentMonth++;
@@ -217,7 +280,7 @@ nextMonthBtn.onclick = function() {
         currentYear++;
     }
     today = new Date(currentYear, currentMonth, 1);
-    renderCalendar(currentMonth, currentYear);
+    renderCalendar(currentMonth, currentYear).catch(console.error);
 };
 
-renderCalendar(currentMonth, currentYear);
+renderCalendar(currentMonth, currentYear).catch(console.error);

@@ -9,6 +9,7 @@ const app = express();
 let currentUser = null; 
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
@@ -59,7 +60,31 @@ app.get('/manager', (req, res) => {
 });
 
 app.get('/staff', (req, res) => {
-    res.render('staff/staff_dashboard');
+    if (!currentUser) {
+        return res.redirect('/');
+    }
+
+    res.render('staff/staff_dashboard', {
+        user: {
+            _id: currentUser._id,
+            username: currentUser.username,
+            role: currentUser.role
+        }
+    });
+});
+
+app.get('/schedule', (req, res) => {
+    if (!currentUser) {
+        return res.redirect('/');
+    }
+
+    res.render('staff/schedule', {
+        user: {
+            _id: currentUser._id,
+            username: currentUser.username,
+            role: currentUser.role
+        }
+    });
 });
 
 app.get('/profile', (req, res) => {
@@ -76,17 +101,24 @@ app.get('/profile', (req, res) => {
 });
 
 app.get('/messages', (req, res) => {
-    res.render('messages');
-});
+    if (!currentUser) {
+        return res.redirect('/');
+    }
 
-// duplicate profile route removed for clarity (same endpoint already handled above)
-
-app.get('/messages', (req, res) => {
     res.render('messages');
 });
 
 app.get('/staffing', (req, res) => {
     res.render('manager/staffing');
+});
+
+app.get('/api/staff-events', async (req, res) => {
+    if (!currentUser) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const events = await Event.find({ assignedStaff: currentUser._id }).sort({ date: 1 }).populate('assignedStaff', 'username');
+    res.json(events);
 });
 
 app.post('/create-event', async (req, res) => {

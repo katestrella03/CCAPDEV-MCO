@@ -33,6 +33,29 @@ body {
     font-weight: 600;
 }
 
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.return-btn {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.85);
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.return-btn:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: #fff;
+}
+
 /* --- CORRECTED LOGOUT BUTTON --- */
 .logout-btn {
     background: #5bb3a7 !important;
